@@ -3,7 +3,6 @@ from time import sleep
 import urllib2
 
 images = []
-pageCount = 2
 urls = ["http://reddit.com"]
 
 def viableImgur(url):
@@ -77,7 +76,7 @@ def loadPage():
     return page
 
 def main():
-    pageCount = 5
+    pageCount = 2
     parser = RedditParser()
     while (pageCount > 0):
         page = loadPage()
