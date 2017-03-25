@@ -1,57 +1,89 @@
 from HTMLParser import HTMLParser
+from time import sleep
 import urllib2
 
 images = []
+pageCount = 2
+urls = ["http://reddit.com"]
 
-def parseImgur(url):
-    if (url.contains("imgur.com") and not url.contains("/a/")):
+def viableImgur(url):
+    if ("imgur.com" in url and "/a/" not in url):
         return True
     return False
 
-def parseConent(attrs):
+def parseImgur(url):
+    if ('.' not in url.split('/')[-1]):
+        url = url + ".jpg"
+        return url
+    return url
+
+def parseContent(attrs):
     url = ""
     acceptable = False
     #Define url
-    if (hasattr(attrs, 'data-url')):
-        url = attrs['data-url']
+    if (contains(attrs, 'data-url')):
+        url = value(attrs, 'data-url')
     else:
-        url = attrs['data-href-url']
+        url = value(attrs, 'data-href-url')
 
     #Define if image
-    if (url.contains('.')):
+    if ('.' in url.split('/')[-1]):
         acceptable = True
-    elif (parseImgur(url)):
+    elif (viableImgur(url)):
+        url = parseImgur(url)
         acceptable = True
 
     #Save if image
     if (acceptable):
         obj = {}
-        obj['sub'] = attrs['data-subreddit']
+        obj['sub'] = value(attrs, 'data-subreddit')
         obj['url'] = url
+        images.append(obj)
 
+def contains(pairList, attr):
+    if (value(pairList, attr) != None):
+        return True
+    return False
+
+def value(pairList, attr):
+    for pair in pairList:
+        if (pair[0] == attr):
+            return pair[1]
+    return None
 
 class RedditParser(HTMLParser):
     def handle_starttag(self, tag, attrs):
         if (tag == "div"):
-	    print "Tag was div"
-            if( hasattr(attrs, 'class')):
-		print "Div has class"
-                if ("thing" in attrs['class'] and hasattr(attrs, 'data-subreddit')):
-		    print "Class has thing and subreddit"
-                    if (hasattr(attrs, 'data-url') or hasattr(attrs, 'data-href-url')):
-			print "CLASS ALSO HAS data"
+            if(contains(attrs, 'class')):
+                htmlClass = value(attrs, 'class')
+                if ("thing" in htmlClass and contains(attrs, 'data-subreddit')):
+                    if (contains(attrs, 'data-url') or contains(attrs, 'data-href-url')):
                         parseContent(attrs)
+        elif (tag == "a"):
+            if (contains(attrs, "href")):
+                href = value(attrs, "href")
+                if ("count" in href and "after" in href):
+                    urls.append(href)
+
+def loadPage():
+    url = urls[-1]
+    print "Loading", url
+    req = urllib2.Request(url)
+    res = urllib2.urlopen(req)
+    page = res.read()
+    #with open('index.html.1', 'r') as content_file:
+	#       page = content_file.read()
+    sleep(10)
+    return page
 
 def main():
-    #url = "http://reddit.com"
-    #req = urllib2.Request(url)
-    #res = urllib2.urlopen(req)
-    #page = res.read()
-    with open('index.html.1', 'r') as content_file:
-	page = content_file.read()
-    print "Parsing", page
+    pageCount = 5
     parser = RedditParser()
-    parser.feed(page)
+    while (pageCount > 0):
+        page = loadPage()
+        parser.feed(page)
+        pageCount -= 1
+    print "Parsed!"
 
 main()
 print images
