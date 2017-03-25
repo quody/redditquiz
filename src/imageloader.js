@@ -1,8 +1,11 @@
-var treeData
+var treeData = []
 var subs = []
+$.getJSON('../data/images2.json', function(json) {
+  treeData = treeData.concat(json)
+})
 $.getJSON('../data/images.json', function(json) {
   console.log("Loaded images")
-  treeData = json
+  treeData = treeData.concat(json)
   parseSubs()
   start()
 })

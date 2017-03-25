@@ -20,16 +20,23 @@ function loadQuestion() {
 
 function loadAnswers() {
   answers = []
-  answers.push(randomSub())
-  answers.push(randomSub())
-  answers.push(randomSub())
-  answers.push(randomSub())
-  answers[Math.floor(Math.random() * choiceCount)] = currentQuestion.sub
+  answers.push(randomSub(answers))
+  answers.push(randomSub(answers))
+  answers.push(randomSub(answers))
+  answers.push(randomSub(answers))
+  if (answers.indexOf(currentQuestion.sub) == -1) {
+    answers[Math.floor(Math.random() * choiceCount)] = currentQuestion.sub
+  }
   return answers
 }
 
-function randomSub() {
-  return subs[Math.floor(Math.random() * subs.length)]
+function randomSub(avoid) {
+  var sub = subs[Math.floor(Math.random() * subs.length)]
+  // Random new sub until they are unique
+  while (avoid.indexOf(sub) != -1) {
+    sub = subs[Math.floor(Math.random() * subs.length)]
+  }
+  return sub
 }
 
 function win() {
