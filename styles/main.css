@@ -33,8 +33,7 @@ body {
 #questionImage {
   max-width: 600px;
   max-height: 600px;
-  width: auto;
-  height: auto;
+  object-fit: contain;
 }
 
 .answerButton {

@@ -66,13 +66,12 @@ class RedditParser(HTMLParser):
 
 def loadPage():
     url = urls[-1]
-    print "Loading", url
     req = urllib2.Request(url)
     res = urllib2.urlopen(req)
     page = res.read()
     #with open('index.html.1', 'r') as content_file:
 	#       page = content_file.read()
-    sleep(10)
+    sleep(30)
     return page
 
 def main():
@@ -82,7 +81,6 @@ def main():
         page = loadPage()
         parser.feed(page)
         pageCount -= 1
-    print "Parsed!"
 
 main()
-print images
+print str(images).replace("'", '"')
