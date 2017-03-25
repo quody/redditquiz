@@ -10,6 +10,7 @@ Image urls and subreddits have to be preparsed. This can be done with the reddit
 The website can be minimized into a single html file by running the minimization script
 
 > chmod +x minimize.sh
+
 > ./minimize.sh
 
 This will minimize all code with gulp as well as embed it into a single index.html in the root directory.
