@@ -32,19 +32,25 @@ def parseConent(attrs):
 
 class RedditParser(HTMLParser):
     def handle_starttag(self, tag, attrs):
-        if (tag == div):
+        if (tag == "div"):
+	    print "Tag was div"
             if( hasattr(attrs, 'class')):
-                if (attrs['class'].contains('thing ') and hasattr(attrs, 'data-subreddit')):
+		print "Div has class"
+                if ("thing" in attrs['class'] and hasattr(attrs, 'data-subreddit')):
+		    print "Class has thing and subreddit"
                     if (hasattr(attrs, 'data-url') or hasattr(attrs, 'data-href-url')):
+			print "CLASS ALSO HAS data"
                         parseContent(attrs)
 
 def main():
-    url = "http://reddit.com"
-    req = urllib2.Request(url)
-    res = urllib2.urlopen(req)
-    page = res.read()
+    #url = "http://reddit.com"
+    #req = urllib2.Request(url)
+    #res = urllib2.urlopen(req)
+    #page = res.read()
+    with open('index.html.1', 'r') as content_file:
+	page = content_file.read()
     print "Parsing", page
-    parser = RedditLParser()
+    parser = RedditParser()
     parser.feed(page)
 
 main()
