@@ -10,7 +10,7 @@ body {
 }
 
 .extend {
-  height: 100%;
+  height: 60%;
   width: 100%;
 }
 
@@ -20,14 +20,27 @@ body {
   justify-content: center;
 }
 
+#questionMedia {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background: white;
+  height: 600px;
+  width: 600px;
+}
+
+
 #questionImage {
-  max-width: 600;
-  max-height: 600;
+  max-width: 600px;
+  max-height: 600px;
+  width: auto;
+  height: auto;
 }
 
 .answerButton {
-  background-color: lightblue;
+  background-color: #5555ff;
   border-radius: 3px;
+  font-weight: 400;
   color: white;
   height: 40px;
   margin-top: 5px;
