@@ -1,9 +1,12 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
 from HTMLParser import HTMLParser
 from time import sleep
 import urllib2
 
 images = []
-urls = ["http://reddit.com"]
+urls = ["http://reddit.com/?limit=100&after=t3_61f1ji"]
 
 def viableImgur(url):
     if ("imgur.com" in url and "/a/" not in url):
@@ -68,14 +71,14 @@ def loadPage():
     url = urls[-1]
     req = urllib2.Request(url)
     res = urllib2.urlopen(req)
-    page = res.read()
+    page = res.read().decode('utf-8')
     #with open('index.html.1', 'r') as content_file:
 	#       page = content_file.read()
-    sleep(30)
+    sleep(10)
     return page
 
 def main():
-    pageCount = 2
+    pageCount = 1
     parser = RedditParser()
     while (pageCount > 0):
         page = loadPage()
