@@ -4,9 +4,17 @@
 from HTMLParser import HTMLParser
 from time import sleep
 import urllib2
+import os
 
 images = []
-urls = ["http://reddit.com/?limit=100&after=t3_61f1ji"]
+
+if (os.path.exists('latesturl')):
+    f = open('latesturl', 'r')
+    url = f.readline()
+    urls = [url]
+    f.close()
+else:
+    urls = ["http://reddit.com/?limit=100"]
 
 def viableImgur(url):
     if ("imgur.com" in url and "/a/" not in url):
@@ -29,7 +37,10 @@ def parseContent(attrs):
         url = value(attrs, 'data-href-url')
 
     #Define if image
-    if ('.' in url.split('/')[-1]):
+    pageName = url.split('/')[-1]
+    pageType = pageName.split('.')[-1]
+    acceptedTypes = ['jpg', 'jpeg', 'png', 'gifv', 'mp4', 'webm']
+    if (pageType in acceptedTypes):
         acceptable = True
     elif (viableImgur(url)):
         url = parseImgur(url)
@@ -38,8 +49,8 @@ def parseContent(attrs):
     #Save if image
     if (acceptable):
         obj = {}
-        obj['sub'] = value(attrs, 'data-subreddit')
-        obj['url'] = url
+        obj['sub'] = str(value(attrs, 'data-subreddit'))
+        obj['url'] = str(url)
         images.append(obj)
 
 def contains(pairList, attr):
@@ -65,7 +76,9 @@ class RedditParser(HTMLParser):
             if (contains(attrs, "href")):
                 href = value(attrs, "href")
                 if ("count" in href and "after" in href):
-                    urls.append(href)
+                    f = open('latesturl', 'w')
+                    f.write(href)
+                    f.close()
 
 def loadPage():
     url = urls[-1]
@@ -74,7 +87,6 @@ def loadPage():
     page = res.read().decode('utf-8')
     #with open('index.html.1', 'r') as content_file:
 	#       page = content_file.read()
-    sleep(10)
     return page
 
 def main():

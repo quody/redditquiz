@@ -3,6 +3,9 @@ var subs = []
 $.getJSON('../data/images2.json', function(json) {
   treeData = treeData.concat(json)
 })
+$.getJSON('../data/images3.json', function(json) {
+  treeData = treeData.concat(json)
+})
 $.getJSON('../data/images.json', function(json) {
   console.log("Loaded images")
   treeData = treeData.concat(json)

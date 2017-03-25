@@ -36,7 +36,7 @@ function setMedia(url) {
   const prototypeImg = "<img id=\"questionImage\" src=\"\"></img>"
   var split = url.split('.')
   var media = $(prototypeImg).attr("src", url)
-  if (split[split.length-1] === 'gifv') {
+  if (split[split.length-1] === 'gifv' || split[split.length-1] === 'mp4' ) {
     const prototypeVideo = '<video preload="auto" autoplay="autoplay" loop="loop" id="questionImage"></video>'
     const prototypeSource = '<source src="" type="video/webm"></source>'
     urlwebm = createUrl(split, 'webm')
